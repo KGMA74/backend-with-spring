@@ -1,0 +1,26 @@
+FROM openjdk:21-jdk
+
+WORKDIR /APP/tmp
+
+COPY . /APP/tmp
+
+#le probleme est lie a l'abscence de command xargs 
+#apt(-get) n'etant pas disponible pour son installation
+
+
+# Assurez-vous que gradlew a les permissions d'exécution
+
+# Utilisez les commandes alternatives pour installer xargs
+RUN apt-get update && \
+    apt-get install -y findutils && \
+    chmod +x ./gradlew
+
+RUN sh -c "cat gradlew" 
+    # && cp build/libs/demo*.jar /APP/app.jar \
+    # && rm -rf /APP/tmp
+
+WORKDIR /APP
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "app.jar"]

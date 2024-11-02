@@ -1,0 +1,32 @@
+services:
+  api:
+    container_name: backend2
+    build: 
+      context: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    networks:
+      - esioverflow-network
+    
+  db:
+    container_name: postgres-sql2
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgres/data:rw
+    networks:
+      - esioverflow-network
+    environment:
+      - POSTGRES_USER=esioverflow
+      - POSTGRES_DB=esioverflow
+      - POSTGRES_PASSWORD=7488
+  
+volumes:
+  pgdata:
+
+networks:
+  esioverflow-network:
+    driver: bridge  
