@@ -1,1 +1,1 @@
-## installer la dependance lombok done
+Backend of Forum for discussion using Spring Boot. This project aims to create the backend for our previous project, Esioverflow, a discussion forum for computer science, which we initially implemented using Django.
