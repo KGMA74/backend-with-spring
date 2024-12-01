@@ -1,6 +1,6 @@
 services:
   api:
-    container_name: backend2
+    container_name: backend3
     build: 
       context: .
     ports:
@@ -11,7 +11,7 @@ services:
       - esioverflow-network
     
   db:
-    container_name: postgres-sql2
+    container_name: postgres-sql3
     image: postgres:latest
     ports:
       - '5432:5432'

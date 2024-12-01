@@ -4,11 +4,12 @@ package com.esioverflow.api.vote;
 
 import com.esioverflow.api.post.Post;
 import com.esioverflow.api.user.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
@@ -33,8 +34,11 @@ public class Vote {
     // to make a vote in given post by
     // a given user only possible one time, 
     // no more
-    @EmbeddedId
-    private VoteId id;
+    // @EmbeddedId
+    // private VoteId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @OneToOne
     @JoinColumn(name = "author_id")
@@ -42,6 +46,5 @@ public class Vote {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonBackReference
     private Post post;
 }

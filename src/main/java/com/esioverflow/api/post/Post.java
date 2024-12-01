@@ -1,5 +1,6 @@
 package com.esioverflow.api.post;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,11 +9,14 @@ import com.esioverflow.api.tag.Tag;
 import com.esioverflow.api.user.User;
 import com.esioverflow.api.vote.Vote;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -25,9 +29,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class Post {
+public class Post implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -52,6 +56,7 @@ public class Post {
         joinColumns = @JoinColumn(name = "post_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @JsonManagedReference
     private List<Tag> tags;
 
     @ManyToOne
@@ -60,7 +65,6 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference
     private Category category;
 
     @OneToMany(mappedBy = "post")
@@ -73,5 +77,6 @@ public class Post {
         this.content = content;
         this.author = author;
         this.category = category;
+        this.createdAt = LocalDateTime.now();
     }
 }
