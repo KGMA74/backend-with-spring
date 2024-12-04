@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = ""; //TODO: genrate key on the site allkeysgenerator.com/random/securityemcreptionkeygenrator.espx
+    private static final String SECRET_KEY = "w6lY+OkMB0OQBqwJmi//Hz83CSssff6IiuqN2RE/2GYgqXOjkB46tvoBr0qPYQgJ9QkSi5Z0ZZx9yyOz4HWmctedfVu41kQ+ZuyXbcNNJ4ZahBc6mshIOGvx4EYemfTj5naVMu6EzKaf4r4Nz906FillX2PUx24VhaiDn6rxybxi"; //TODO: genrate key on the site allkeysgenerator.com/random/securityemcreptionkeygenrator.espx
 
     public String extractUsername(String token) {
       return extractClaim(token, Claims::getSubject);
@@ -63,12 +65,14 @@ public class JwtService {
     private Claims extractAlClaims(String token){
         return Jwts
                 .parser()
-                .verifyWith((PublicKey) getSignInKey())
+                .verifyWith((SecretKey) getSignInKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
 
+    
+    // Récupérer la clé secrète pour la signature
     private Key getSignInKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);

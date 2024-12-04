@@ -22,17 +22,15 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     // private final LogoutHandler logoutHandler;
 
-    private String[] WHITE_LIST_URL = {"/api/v1/auth/**"};
+    private String WHITE_LIST_URL = "/api/v1/auth/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(req -> 
-                req.requestMatchers(WHITE_LIST_URL) 
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                req.requestMatchers(WHITE_LIST_URL).permitAll()
+                    .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)

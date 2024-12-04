@@ -1,0 +1,55 @@
+# pour la config d un serveur de messagerie
+version: '3'
+
+services:
+  # Service pour le serveur web (UI de gestion Mailu)
+  nginx:
+    image: mailu/nginx:latest
+    networks:
+      - localnet
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    environment:
+      - DOMAIN=your.local.domain
+      - DB_HOST=db
+      - DB_USER=mailu
+      - DB_PASS=mailu
+      - SECRET_KEY=secretkey
+
+  # Service pour le serveur SMTP
+  smtp:
+    image: mailu/smtp:latest
+    networks:
+      - localnet
+    ports:
+      - "127.0.0.1:25:25"
+      - "127.0.0.1:465:465"
+      - "127.0.0.1:587:587"
+    environment:
+      - DOMAIN=your.local.domain
+
+  # Service pour IMAP
+  imap:
+    image: mailu/imap:latest
+    networks:
+      - localnet
+    ports:
+      - "127.0.0.1:993:993"
+    environment:
+      - DOMAIN=your.local.domain
+
+  # Base de données
+  db:
+    image: mariadb:10.3
+    networks:
+      - localnet
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=mailu
+      - MYSQL_USER=mailu
+      - MYSQL_PASSWORD=mailu
+
+networks:
+  localnet:
+    driver: bridge

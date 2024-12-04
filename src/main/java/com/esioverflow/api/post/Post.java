@@ -9,10 +9,7 @@ import com.esioverflow.api.tag.Tag;
 import com.esioverflow.api.user.User;
 import com.esioverflow.api.vote.Vote;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
