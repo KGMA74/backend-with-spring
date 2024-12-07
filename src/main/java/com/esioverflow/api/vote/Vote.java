@@ -1,19 +1,16 @@
 package com.esioverflow.api.vote;
 
-
-
 import com.esioverflow.api.post.Post;
 import com.esioverflow.api.user.User;
 
 import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,24 +24,16 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Vote {
     
-    //                  TODO
-    // use author and post as primary key
-    // instead of the integer id
-    // cuz we need to make the possibility 
-    // to make a vote in given post by
-    // a given user only possible one time, 
-    // no more
-    // @EmbeddedId
-    // private VoteId id;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    @EmbeddedId
+    private VoteId id;
+    
     @OneToOne
+    @MapsId("authorId")
     @JoinColumn(name = "author_id")
     private User author;
 
     @ManyToOne
+    @MapsId("postId")
     @JoinColumn(name = "post_id")
     private Post post;
 }

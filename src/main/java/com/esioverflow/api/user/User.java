@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.esioverflow.api.conversation.Conversation;
 import com.esioverflow.api.post.Post;
 import com.esioverflow.api.profile.Profile;
+import com.esioverflow.api.token.Token;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -73,9 +74,14 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    // TOKEN
+
     @OneToOne
     @JoinColumn(name = "profile_id")
     private Profile profile;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @OneToMany(mappedBy = "author")
     @JsonManagedReference

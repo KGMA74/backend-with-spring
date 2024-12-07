@@ -20,6 +20,15 @@ public class UserService {
         this.userMapper = userMapper;
         this.profileRepository = profileRepository;
     }
+
+    // TODO: look for a way to create an empty profile and associate it to the user we wanna persiste
+    public User saveUser(User user){
+        user.setProfile(
+            profileRepository.save(new Profile())
+        );
+        
+        return userRepository.save(user);
+    }
     
     public User saveUser(UserDto dto){
         User user = new User(
