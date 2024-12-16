@@ -34,7 +34,7 @@ public class LogoutService implements LogoutHandler {
         Authentication authentication
     ) {
 
-        Cookie accessCookie = authCookiesService.getCookie(request, accessCookieName);q
+        Cookie accessCookie = authCookiesService.getCookie(request, accessCookieName);
         Cookie refreshCookie = authCookiesService.getCookie(request, refreshCookieName);
 
         if(accessCookie != null){
