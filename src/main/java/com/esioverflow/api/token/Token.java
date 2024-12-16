@@ -4,6 +4,8 @@ import com.esioverflow.api.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,6 +42,11 @@ public class Token {
 
     public boolean isValid(){
         return !(expired || revoked);
+    }
+
+    public void ban(){ // make the token invalid
+        expired = true;
+        revoked = true;
     }
 
 }

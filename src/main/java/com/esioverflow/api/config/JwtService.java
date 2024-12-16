@@ -1,7 +1,6 @@
 package com.esioverflow.api.config;
 
 import java.security.Key;
-import java.security.PublicKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,18 +8,32 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.esioverflow.api.token.TokenRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-    private static final String SECRET_KEY = "w6lY+OkMB0OQBqwJmi//Hz83CSssff6IiuqN2RE/2GYgqXOjkB46tvoBr0qPYQgJ9QkSi5Z0ZZx9yyOz4HWmctedfVu41kQ+ZuyXbcNNJ4ZahBc6mshIOGvx4EYemfTj5naVMu6EzKaf4r4Nz906FillX2PUx24VhaiDn6rxybxi"; //TODO: genrate key on the site allkeysgenerator.com/random/securityemcreptionkeygenrator.espx
+    private final TokenRepository tokenRepository;
+
+    @Value("${application.security.secret-key}")
+    private String SECRET_KEY;
+
+    @Value("${application.security.refresh-token.expiration}")
+    private long refreshExpiration;
+
+    @Value("${application.security.access-token.expriration}")
+    private long accessExpiration;
 
     public String extractUsername(String token) {
       return extractClaim(token, Claims::getSubject);
@@ -31,31 +44,46 @@ public class JwtService {
         return claimsresolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateRefreshToken(UserDetails userDetails){
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
-    public String generateToken(
+    public String generateAccessToken(UserDetails userDetails){
+        return generateAccessToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateAccessToken(
         Map<String, Object> extractClaims,
         UserDetails userDetails
     ){
+        return buildToken(extractClaims, userDetails, accessExpiration);
+    }
+
+    private String buildToken(
+        Map<String, Object> extractClaims,
+        UserDetails userDetails,
+        long expiration // in second
+    ){
         return Jwts
-                .builder()
-                .claims(extractClaims)
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 )) // 24 h
-                .signWith(getSignInKey())
-                .compact();
+            .builder()
+            .claims(extractClaims)
+            .subject(userDetails.getUsername())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + 1000 * expiration))
+            .signWith(getSignInKey())
+            .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
+
         return username.equals(userDetails.getUsername()) && ! isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token){
-        return extratExpiration(token).before(new Date());
+        return extratExpiration(token).before(new Date()) && tokenRepository.findByToken(token)
+                                                                            .map(t -> t.isValid())
+                                                                            .orElse(false);
     }
 
     private Date extratExpiration(String token){

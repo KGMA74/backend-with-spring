@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "application.security.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'application.security.secret-key'"
+  },
+  {
+    "name": "application.security.access-token.name",
+    "type": "java.lang.String",
+    "description": "A description for 'application.security.access-token.name'"
+  },
+  {
+    "name": "application.security.refresh-token.name",
+    "type": "java.lang.String",
+    "description": "A description for 'application.security.refresh-token.name'"
+  },
+  {
+    "name": "application.security.access-token.expriration",
+    "type": "java.lang.String",
+    "description": "La duree d'expiration du access token en second"
+  },
+  {
+    "name": "application.security.refresh-token.expiration",
+    "type": "java.lang.String",
+    "description": "La duree d'expiration du refresh token en second"
+  }
+]}

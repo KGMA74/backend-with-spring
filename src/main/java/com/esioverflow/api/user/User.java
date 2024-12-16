@@ -60,6 +60,9 @@ public class User implements UserDetails {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    // TODO: look for a way to autmotically fill in
+    // the column of type LocalDateTime
+
     @Column(name = "created_at")
     @CreatedDate
     private LocalDateTime createdAt;

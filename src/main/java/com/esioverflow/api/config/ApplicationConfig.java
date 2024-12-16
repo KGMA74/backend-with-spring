@@ -19,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationConfig {
     
+    
     private final UserRepository userRepository;
+    // private final Environment env;
     
     @Bean
     public UserDetailsService userDetailsService(){
@@ -32,6 +34,7 @@ public class ApplicationConfig {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
+
         
         return authProvider;
     }
@@ -45,4 +48,10 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    // @Bean
+    // public String getSecretKey(){
+    //     return env.getProperty("secret-key");
+    // }
+    
 }

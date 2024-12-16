@@ -4,8 +4,7 @@ spring:
     
   #profiles:
     #active: dev
-  
-
+   
   datasource:
     # url: jdbc:postgresql://db:5432/esioverflow
     # username: esioverflow
@@ -18,11 +17,28 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-      #ddl-auto: create-drop
-      #ddl-auto: create
+      # ddl-auto: create-drop
+      # ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format-sql: true
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: warn
+
+application:
+  security:
+    secret-key: w6lY+OkMB0OQBqwJmi//Hz83CSssff6IiuqN2RE/2GYgqXOjkB46tvoBr0qPYQgJ9QkSi5Z0ZZx9yyOz4HWmctedfVu41kQ+ZuyXbcNNJ4ZahBc6mshIOGvx4EYemfTj5naVMu6EzKaf4r4Nz906FillX2PUx24VhaiDn6rxybxi
+    access-token:
+      name: access
+      expriration: 100 #1mn
+    refresh-token:
+      name: refresh
+      expiration: 300 # 5mn
+
+    HttpOnly: false
+    Secure: false

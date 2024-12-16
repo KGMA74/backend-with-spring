@@ -1,5 +1,7 @@
 package com.esioverflow.api.auth;
 
+import com.esioverflow.api.user.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,4 +15,5 @@ public class RegisterRequest {
     private String nickname;
     private String email;
     private String password;
+    private Role role;
 }

@@ -21,7 +21,6 @@ public class UserService {
         this.profileRepository = profileRepository;
     }
 
-    // TODO: look for a way to create an empty profile and associate it to the user we wanna persiste
     public User saveUser(User user){
         user.setProfile(
             profileRepository.save(new Profile())
